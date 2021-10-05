@@ -41,6 +41,12 @@ describe('Aged Brie:', function () {
         const updatedItems = gildedRose.updateQuality();
         expect(updatedItems[0].quality).to.equal(21);
     });
+    it('increases in quality by 2 after sell by date', function() {
+        const items = [new Item("Aged Brie", 0, 20)]
+        const gildedRose = new GildedRose(items);
+        const updatedItems = gildedRose.updateQuality();
+        expect(updatedItems[0].quality).to.equal(22);
+    });
 })
 
 describe('Sulfuras:', function () {
