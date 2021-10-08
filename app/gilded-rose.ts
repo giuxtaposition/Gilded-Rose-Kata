@@ -21,12 +21,11 @@ export class GildedRose {
     for (let i = 0; i < this.items.length; i++) {
       if (
         !this.isAgedBrie(this.items[i]) &&
-        !this.isBackstagePasses(this.items[i])
+        !this.isBackstagePasses(this.items[i]) &&
+        !this.isSulfuras(this.items[i])
       ) {
         if (this.items[i].quality > 0) {
-          if (!this.isSulfuras(this.items[i])) {
-            this.decreaseQuality(this.items[i], 1);
-          }
+          this.decreaseQuality(this.items[i], 1);
         }
       } else {
         if (this.items[i].quality < 50) {
