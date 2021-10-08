@@ -17,6 +17,14 @@ export class GildedRose {
     this.items = items;
   }
 
+  decreaseQuality(item, number) {
+    item.quality = item.quality - number;
+  }
+
+  increaseQuality(item, number) {
+    item.quality = item.quality + number;
+  }
+
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (
@@ -25,20 +33,20 @@ export class GildedRose {
       ) {
         if (this.items[i].quality > 0) {
           if (this.items[i].name != "Sulfuras, Hand of Ragnaros") {
-            this.items[i].quality = this.items[i].quality - 1;
+            this.decreaseQuality(this.items[i], 1);
           }
         }
       } else {
         if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1;
+          this.increaseQuality(this.items[i], 1);
           if (
             this.items[i].name == "Backstage passes to a TAFKAL80ETC concert"
           ) {
             if (this.items[i].sellIn < 11 && this.items[i].quality < 50) {
-              this.items[i].quality = this.items[i].quality + 1;
+              this.increaseQuality(this.items[i], 1);
             }
             if (this.items[i].sellIn < 6 && this.items[i].quality < 50) {
-              this.items[i].quality = this.items[i].quality + 1;
+              this.increaseQuality(this.items[i], 1);
             }
           }
         }
@@ -55,15 +63,14 @@ export class GildedRose {
               this.items[i].quality > 0 &&
               this.items[i].name != "Sulfuras, Hand of Ragnaros"
             ) {
-              this.items[i].quality = this.items[i].quality - 1;
+              this.decreaseQuality(this.items[i], 1);
             }
           } else {
-            this.items[i].quality =
-              this.items[i].quality - this.items[i].quality;
+            this.decreaseQuality(this.items[i], this.items[i].quality);
           }
         } else {
           if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
+            this.increaseQuality(this.items[i], 1);
           }
         }
       }
