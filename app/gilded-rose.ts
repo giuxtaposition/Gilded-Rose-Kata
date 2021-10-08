@@ -18,15 +18,15 @@ export class GildedRose {
   }
 
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      this.updateQualityBeforeSellIn(this.items[i]);
+    this.items.forEach((item) => {
+      this.updateQualityBeforeSellIn(item);
 
-      this.decreaseSellIn(this.items[i]);
+      this.decreaseSellIn(item);
 
-      if (this.hasSellInDatePassed(this.items[i])) {
-        this.updateQualityAfterSellIn(this.items[i]);
+      if (this.hasSellInDatePassed(item)) {
+        this.updateQualityAfterSellIn(item);
       }
-    }
+    });
 
     return this.items;
   }
