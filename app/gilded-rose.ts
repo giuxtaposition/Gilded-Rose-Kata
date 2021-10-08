@@ -24,14 +24,14 @@ export class GildedRose {
       this.decreaseSellIn(this.items[i]);
 
       if (this.hasSellInDatePassed(this.items[i])) {
-        this.updateQualityWhenSellInHasPassed(this.items[i]);
+        this.updateQualityAfterSellIn(this.items[i]);
       }
     }
 
     return this.items;
   }
 
-  updateQualityWhenSellInHasPassed(item) {
+  updateQualityAfterSellIn(item) {
     if (this.isAgedBrie(item)) {
       this.increaseQuality(item, 1);
     }
