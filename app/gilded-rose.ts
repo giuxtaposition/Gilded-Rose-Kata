@@ -17,6 +17,9 @@ export class GildedRose {
     this.items = items;
   }
 
+  hasSellInDatePassed(item) {
+    return item.sellIn < 0;
+  }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (!this.isSpecialItem(this.items[i])) {
@@ -31,19 +34,17 @@ export class GildedRose {
 
       this.decreaseSellIn(this.items[i]);
 
-      if (this.items[i].sellIn < 0) {
+      if (this.hasSellInDatePassed(this.items[i])) {
         if (this.isAgedBrie(this.items[i])) {
           this.increaseQuality(this.items[i], 1);
         }
 
-        if (!this.isAgedBrie(this.items[i])) {
-          if (!this.isBackstagePasses(this.items[i])) {
-            if (!this.isSulfuras(this.items[i])) {
-              this.decreaseQuality(this.items[i], 1);
-            }
-          } else {
-            this.decreaseQuality(this.items[i], this.items[i].quality);
-          }
+        if (this.isBackstagePasses(this.items[i])) {
+          this.decreaseQuality(this.items[i], this.items[i].quality);
+        }
+
+        if (!this.isSpecialItem(this.items[i])) {
+          this.decreaseQuality(this.items[i], 1);
         }
       }
     }
