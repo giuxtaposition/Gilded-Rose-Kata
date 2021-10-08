@@ -19,15 +19,7 @@ export class GildedRose {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (!this.isSpecialItem(this.items[i])) {
-        this.decreaseQuality(this.items[i], 1);
-      } else {
-        this.increaseQuality(this.items[i], 1);
-
-        if (this.isBackstagePasses(this.items[i])) {
-          this.updateBackstagePassesQuality(this.items[i]);
-        }
-      }
+      this.updateQualityBeforeSellIn(this.items[i]);
 
       this.decreaseSellIn(this.items[i]);
 
@@ -50,6 +42,18 @@ export class GildedRose {
 
     if (!this.isSpecialItem(item)) {
       this.decreaseQuality(item, 1);
+    }
+  }
+
+  updateQualityBeforeSellIn(item) {
+    if (!this.isSpecialItem(item)) {
+      this.decreaseQuality(item, 1);
+    } else {
+      this.increaseQuality(item, 1);
+
+      if (this.isBackstagePasses(item)) {
+        this.updateBackstagePassesQuality(item);
+      }
     }
   }
 
