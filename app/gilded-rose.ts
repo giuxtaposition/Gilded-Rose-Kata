@@ -19,11 +19,7 @@ export class GildedRose {
 
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
-      if (
-        !this.isAgedBrie(this.items[i]) &&
-        !this.isBackstagePasses(this.items[i]) &&
-        !this.isSulfuras(this.items[i])
-      ) {
+      if (!this.isSpecialItem(this.items[i])) {
         if (this.items[i].quality > 0) {
           this.decreaseQuality(this.items[i], 1);
         }
@@ -69,6 +65,14 @@ export class GildedRose {
 
   increaseQuality(item, number) {
     item.quality = item.quality + number;
+  }
+
+  isSpecialItem(item) {
+    return (
+      this.isAgedBrie(item) ||
+      this.isBackstagePasses(item) ||
+      this.isSulfuras(item)
+    );
   }
 
   isAgedBrie(item) {
