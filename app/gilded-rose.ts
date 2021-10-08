@@ -17,9 +17,6 @@ export class GildedRose {
     this.items = items;
   }
 
-  hasSellInDatePassed(item) {
-    return item.sellIn < 0;
-  }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (!this.isSpecialItem(this.items[i])) {
@@ -35,21 +32,25 @@ export class GildedRose {
       this.decreaseSellIn(this.items[i]);
 
       if (this.hasSellInDatePassed(this.items[i])) {
-        if (this.isAgedBrie(this.items[i])) {
-          this.increaseQuality(this.items[i], 1);
-        }
-
-        if (this.isBackstagePasses(this.items[i])) {
-          this.decreaseQuality(this.items[i], this.items[i].quality);
-        }
-
-        if (!this.isSpecialItem(this.items[i])) {
-          this.decreaseQuality(this.items[i], 1);
-        }
+        this.updateQualityWhenSellInHasPassed(this.items[i]);
       }
     }
 
     return this.items;
+  }
+
+  updateQualityWhenSellInHasPassed(item) {
+    if (this.isAgedBrie(item)) {
+      this.increaseQuality(item, 1);
+    }
+
+    if (this.isBackstagePasses(item)) {
+      this.decreaseQuality(item, item.quality);
+    }
+
+    if (!this.isSpecialItem(item)) {
+      this.decreaseQuality(item, 1);
+    }
   }
 
   updateBackstagePassesQuality(item) {
@@ -97,5 +98,9 @@ export class GildedRose {
 
   isSulfuras(item) {
     return item.name === "Sulfuras, Hand of Ragnaros";
+  }
+
+  hasSellInDatePassed(item) {
+    return item.sellIn < 0;
   }
 }
