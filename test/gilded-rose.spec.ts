@@ -96,12 +96,19 @@ describe("Backstage Passes:", function () {
   });
 });
 
-describe("Conjured Items:", function () {
-  it("decrease in quality twice as fast as normal items", function () {
+describe("Conjured Items: decrease in quality twice as fast as normal items", function () {
+  it("before Sell In date decrease by 2", function () {
     const items = [new Item("Conjured Potato", 2, 20)];
     const gildedRose = new GildedRose(items);
     const updatedItems = gildedRose.updateQuality();
     expect(updatedItems[0].quality).to.equal(18);
     expect(updatedItems[0].sellIn).to.equal(1);
+  });
+  it("after Sell In Date decrease by 4", function () {
+    const items = [new Item("Conjured Potato", 0, 20)];
+    const gildedRose = new GildedRose(items);
+    const updatedItems = gildedRose.updateQuality();
+    expect(updatedItems[0].quality).to.equal(16);
+    expect(updatedItems[0].sellIn).to.equal(-1);
   });
 });

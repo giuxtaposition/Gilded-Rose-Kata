@@ -68,7 +68,9 @@ export class GildedRose {
 
   decreaseQuality(item, number) {
     if (item.quality > 0) {
-      item.quality = item.quality - number;
+      item.quality = this.isConjured(item)
+        ? item.quality - number - 1
+        : item.quality - number;
     }
   }
 
@@ -90,6 +92,10 @@ export class GildedRose {
       this.isBackstagePasses(item) ||
       this.isSulfuras(item)
     );
+  }
+
+  isConjured(item) {
+    return item.name.includes("Conjured");
   }
 
   isAgedBrie(item) {
