@@ -28,8 +28,8 @@ Requirements:
 
 ## Installing and running tests
 ``` bash
-git clone https://github.com/giuxtaposition/.git
-cd GildedRose_tests
+git clone git@github.com:giuxtaposition/Gilded-Rose-Kata.git
+cd Gilded-Rose-Kata
 yarn install
 yarn test
 ```
