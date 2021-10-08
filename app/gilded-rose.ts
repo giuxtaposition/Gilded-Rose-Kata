@@ -24,7 +24,7 @@ export class GildedRose {
         !this.isBackstagePasses(this.items[i])
       ) {
         if (this.items[i].quality > 0) {
-          if (this.items[i].name != "Sulfuras, Hand of Ragnaros") {
+          if (!this.isSulfuras(this.items[i])) {
             this.decreaseQuality(this.items[i], 1);
           }
         }
@@ -41,16 +41,13 @@ export class GildedRose {
           }
         }
       }
-      if (this.items[i].name != "Sulfuras, Hand of Ragnaros") {
+      if (!this.isSulfuras(this.items[i])) {
         this.items[i].sellIn = this.items[i].sellIn - 1;
       }
       if (this.items[i].sellIn < 0) {
         if (!this.isAgedBrie(this.items[i])) {
           if (!this.isBackstagePasses(this.items[i])) {
-            if (
-              this.items[i].quality > 0 &&
-              this.items[i].name != "Sulfuras, Hand of Ragnaros"
-            ) {
+            if (this.items[i].quality > 0 && !this.isSulfuras(this.items[i])) {
               this.decreaseQuality(this.items[i], 1);
             }
           } else {
@@ -81,5 +78,9 @@ export class GildedRose {
 
   isBackstagePasses(item) {
     return item.name === "Backstage passes to a TAFKAL80ETC concert";
+  }
+
+  isSulfuras(item) {
+    return item.name === "Sulfuras, Hand of Ragnaros";
   }
 }
