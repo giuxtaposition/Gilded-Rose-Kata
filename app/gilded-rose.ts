@@ -37,7 +37,7 @@ export class GildedRose {
         }
       }
       if (!this.isSulfuras(this.items[i])) {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+        this.decreaseSellIn(this.items[i]);
       }
       if (this.items[i].sellIn < 0) {
         if (!this.isAgedBrie(this.items[i])) {
@@ -65,6 +65,10 @@ export class GildedRose {
 
   increaseQuality(item, number) {
     item.quality = item.quality + number;
+  }
+
+  decreaseSellIn(item) {
+    item.sellIn = item.sellIn - 1;
   }
 
   isSpecialItem(item) {
