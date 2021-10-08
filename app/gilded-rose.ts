@@ -20,29 +20,25 @@ export class GildedRose {
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (!this.isSpecialItem(this.items[i])) {
-        if (this.items[i].quality > 0) {
-          this.decreaseQuality(this.items[i], 1);
-        }
+        this.decreaseQuality(this.items[i], 1);
       } else {
-        if (this.items[i].quality < 50) {
-          this.increaseQuality(this.items[i], 1);
+        this.increaseQuality(this.items[i], 1);
 
-          if (this.isBackstagePasses(this.items[i])) {
-            this.updateBackstagePassesQuality(this.items[i]);
-          }
+        if (this.isBackstagePasses(this.items[i])) {
+          this.updateBackstagePassesQuality(this.items[i]);
         }
       }
 
       this.decreaseSellIn(this.items[i]);
 
       if (this.items[i].sellIn < 0) {
-        if (this.isAgedBrie(this.items[i]) && this.items[i].quality < 50) {
+        if (this.isAgedBrie(this.items[i])) {
           this.increaseQuality(this.items[i], 1);
         }
 
         if (!this.isAgedBrie(this.items[i])) {
           if (!this.isBackstagePasses(this.items[i])) {
-            if (this.items[i].quality > 0 && !this.isSulfuras(this.items[i])) {
+            if (!this.isSulfuras(this.items[i])) {
               this.decreaseQuality(this.items[i], 1);
             }
           } else {
@@ -65,11 +61,15 @@ export class GildedRose {
   }
 
   decreaseQuality(item, number) {
-    item.quality = item.quality - number;
+    if (item.quality > 0) {
+      item.quality = item.quality - number;
+    }
   }
 
   increaseQuality(item, number) {
-    item.quality = item.quality + number;
+    if (item.quality < 50) {
+      item.quality = item.quality + number;
+    }
   }
 
   decreaseSellIn(item) {
