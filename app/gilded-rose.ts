@@ -25,10 +25,13 @@ export class GildedRose {
     item.quality = item.quality + number;
   }
 
+  isAgedBrie(item) {
+    return item.name === "Aged Brie";
+  }
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       if (
-        this.items[i].name != "Aged Brie" &&
+        !this.isAgedBrie(this.items[i]) &&
         this.items[i].name != "Backstage passes to a TAFKAL80ETC concert"
       ) {
         if (this.items[i].quality > 0) {
@@ -55,7 +58,7 @@ export class GildedRose {
         this.items[i].sellIn = this.items[i].sellIn - 1;
       }
       if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != "Aged Brie") {
+        if (!this.isAgedBrie(this.items[i])) {
           if (
             this.items[i].name != "Backstage passes to a TAFKAL80ETC concert"
           ) {
