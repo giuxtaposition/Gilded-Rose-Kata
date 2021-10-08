@@ -1,5 +1,7 @@
-# Gilded Rose Kata Test Suite
-This is a modified version of [Gilded Rose Kata](https://github.com/xpeppers/GildedRose-Refactoring-Kata) in which I am only implementing a test suite to check if the following requirements are met:
+# Gilded Rose Kata
+This is my solution to [Gilded Rose Kata](https://github.com/xpeppers/GildedRose-Refactoring-Kata).
+
+Requirements:
 
 ```
 - All items have a SellIn value which denotes the number of days we have to sell the item	
@@ -14,11 +16,15 @@ This is a modified version of [Gilded Rose Kata](https://github.com/xpeppers/Gil
     - Quality increases by 2 when there are 10 days or less
     - By 3 when there are 5 days or less
     - Quality drops to 0 after the concert
+- "Conjured" items degrade in Quality twice as fast as normal items
 ```
 
 **Language**: Typescript
 
-**Testing Frameworks**: [Mocha](https://github.com/mochajs/mocha), [Chai](https://github.com/chaijs/chai)
+**Testing Frameworks**:
+- [Mocha](https://github.com/mochajs/mocha): Test runner
+- [Chai](https://github.com/chaijs/chai): BDD / TDD assertion library
+- [NYC](https://github.com/istanbuljs/nyc): Test Coverage Generator
 
 ## Installing and running tests
 ``` bash
