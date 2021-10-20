@@ -19,16 +19,8 @@ export class Item {
         }
     }
 
-    private isSpecialItem() {
-        return this.isSulfuras()
-    }
-
     private isConjured() {
         return this._name.includes('Conjured')
-    }
-
-    private isSulfuras() {
-        return this._name === 'Sulfuras, Hand of Ragnaros'
     }
 
     protected decreaseQualityBy(number) {
@@ -46,9 +38,7 @@ export class Item {
     }
 
     protected decreaseSellIn() {
-        if (!this.isSulfuras()) {
-            this._sellIn = this._sellIn - 1
-        }
+        this._sellIn = this._sellIn - 1
     }
 
     protected hasSellInDatePassed() {
@@ -56,17 +46,11 @@ export class Item {
     }
 
     public updateQualityBeforeSellIn() {
-        if (!this.isSpecialItem()) {
-            this.decreaseQualityBy(1)
-        } else {
-            this.increaseQualityBy(1)
-        }
+        this.decreaseQualityBy(1)
     }
 
     private updateQualityAfterSellIn() {
-        if (!this.isSpecialItem()) {
-            this.decreaseQualityBy(1)
-        }
+        this.decreaseQualityBy(1)
     }
 
     get name() {
@@ -132,6 +116,14 @@ export class BackstagePasses extends Item {
     }
 }
 
+export class Sulfuras extends Item {
+    constructor(sellIn, quality) {
+        super('Sulfuras, Hand of Ragnaros', sellIn, quality)
+    }
+
+    public update() {}
+}
+
 export class GildedRose {
     items: Array<Item>
 
@@ -142,6 +134,8 @@ export class GildedRose {
                     return new AgedBrie(item.sellIn, item.quality)
                 case 'Backstage passes to a TAFKAL80ETC concert':
                     return new BackstagePasses(item.sellIn, item.quality)
+                case 'Sulfuras, Hand of Ragnaros':
+                    return new Sulfuras(item.sellIn, item.quality)
                 default:
                     return item
             }
