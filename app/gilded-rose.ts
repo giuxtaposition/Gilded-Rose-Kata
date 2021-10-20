@@ -9,29 +9,39 @@ export class Item {
         this._quality = quality
     }
 
-    public isSpecialItem() {
+    public updateQuality() {
+        this.updateQualityBeforeSellIn()
+
+        this.decreaseSellIn()
+
+        if (this.hasSellInDatePassed()) {
+            this.updateQualityAfterSellIn()
+        }
+    }
+
+    private isSpecialItem() {
         return (
             this.isAgedBrie() || this.isBackstagePasses() || this.isSulfuras()
         )
     }
 
-    public isConjured() {
+    private isConjured() {
         return this._name.includes('Conjured')
     }
 
-    public isAgedBrie() {
+    private isAgedBrie() {
         return this._name === 'Aged Brie'
     }
 
-    public isBackstagePasses() {
+    private isBackstagePasses() {
         return this._name === 'Backstage passes to a TAFKAL80ETC concert'
     }
 
-    public isSulfuras() {
+    private isSulfuras() {
         return this._name === 'Sulfuras, Hand of Ragnaros'
     }
 
-    decreaseQualityBy(number) {
+    private decreaseQualityBy(number) {
         if (this._quality > 0) {
             this._quality = this.isConjured()
                 ? this._quality - number - 1
@@ -39,20 +49,55 @@ export class Item {
         }
     }
 
-    increaseQualityBy(number) {
+    private increaseQualityBy(number) {
         if (this._quality < 50) {
             this._quality = this._quality + number
         }
     }
 
-    decreaseSellIn() {
+    private decreaseSellIn() {
         if (!this.isSulfuras()) {
             this._sellIn = this._sellIn - 1
         }
     }
 
-    hasSellInDatePassed() {
+    private hasSellInDatePassed() {
         return this._sellIn < 0
+    }
+
+    private updateQualityBeforeSellIn() {
+        if (!this.isSpecialItem()) {
+            this.decreaseQualityBy(1)
+        } else {
+            this.increaseQualityBy(1)
+
+            if (this.isBackstagePasses()) {
+                this.updateBackstagePassesQuality()
+            }
+        }
+    }
+
+    updateBackstagePassesQuality() {
+        if (this._sellIn < 11 && this._quality < 50) {
+            this.increaseQualityBy(1)
+        }
+        if (this._sellIn < 6 && this._quality < 50) {
+            this.increaseQualityBy(1)
+        }
+    }
+
+    updateQualityAfterSellIn() {
+        if (this.isAgedBrie()) {
+            this.increaseQualityBy(1)
+        }
+
+        if (this.isBackstagePasses()) {
+            this.decreaseQualityBy(this._quality)
+        }
+
+        if (!this.isSpecialItem()) {
+            this.decreaseQualityBy(1)
+        }
     }
 
     get name() {
@@ -85,50 +130,9 @@ export class GildedRose {
 
     updateQuality() {
         this.items.forEach(item => {
-            this.updateQualityBeforeSellIn(item)
-
-            item.decreaseSellIn()
-
-            if (item.hasSellInDatePassed()) {
-                this.updateQualityAfterSellIn(item)
-            }
+            item.updateQuality()
         })
 
         return this.items
-    }
-
-    updateQualityAfterSellIn(item) {
-        if (item.isAgedBrie()) {
-            item.increaseQualityBy(1)
-        }
-
-        if (item.isBackstagePasses()) {
-            item.decreaseQualityBy(item.quality)
-        }
-
-        if (!item.isSpecialItem()) {
-            item.decreaseQualityBy(1)
-        }
-    }
-
-    updateQualityBeforeSellIn(item) {
-        if (!item.isSpecialItem()) {
-            item.decreaseQualityBy(1)
-        } else {
-            item.increaseQualityBy(1)
-
-            if (item.isBackstagePasses()) {
-                this.updateBackstagePassesQuality(item)
-            }
-        }
-    }
-
-    updateBackstagePassesQuality(item) {
-        if (item.sellIn < 11 && item.quality < 50) {
-            item.increaseQualityBy(1)
-        }
-        if (item.sellIn < 6 && item.quality < 50) {
-            item.increaseQualityBy(1)
-        }
     }
 }
