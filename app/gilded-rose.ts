@@ -9,6 +9,28 @@ export class Item {
         this._quality = quality
     }
 
+    public isSpecialItem() {
+        return (
+            this.isAgedBrie() || this.isBackstagePasses() || this.isSulfuras()
+        )
+    }
+
+    public isConjured() {
+        return this._name.includes('Conjured')
+    }
+
+    public isAgedBrie() {
+        return this._name === 'Aged Brie'
+    }
+
+    public isBackstagePasses() {
+        return this._name === 'Backstage passes to a TAFKAL80ETC concert'
+    }
+
+    public isSulfuras() {
+        return this._name === 'Sulfuras, Hand of Ragnaros'
+    }
+
     get name() {
         return this._name
     }
@@ -52,26 +74,26 @@ export class GildedRose {
     }
 
     updateQualityAfterSellIn(item) {
-        if (this.isAgedBrie(item)) {
+        if (item.isAgedBrie()) {
             this.increaseQuality(item, 1)
         }
 
-        if (this.isBackstagePasses(item)) {
+        if (item.isBackstagePasses()) {
             this.decreaseQuality(item, item.quality)
         }
 
-        if (!this.isSpecialItem(item)) {
+        if (!item.isSpecialItem()) {
             this.decreaseQuality(item, 1)
         }
     }
 
     updateQualityBeforeSellIn(item) {
-        if (!this.isSpecialItem(item)) {
+        if (!item.isSpecialItem()) {
             this.decreaseQuality(item, 1)
         } else {
             this.increaseQuality(item, 1)
 
-            if (this.isBackstagePasses(item)) {
+            if (item.isBackstagePasses()) {
                 this.updateBackstagePassesQuality(item)
             }
         }
@@ -88,7 +110,7 @@ export class GildedRose {
 
     decreaseQuality(item, number) {
         if (item.quality > 0) {
-            item.quality = this.isConjured(item)
+            item.quality = item.isConjured()
                 ? item.quality - number - 1
                 : item.quality - number
         }
@@ -100,34 +122,10 @@ export class GildedRose {
         }
     }
 
-    decreaseSellIn(item) {
-        if (!this.isSulfuras(item)) {
+    decreaseSellIn(item: Item) {
+        if (!item.isSulfuras()) {
             item.sellIn = item.sellIn - 1
         }
-    }
-
-    isSpecialItem(item) {
-        return (
-            this.isAgedBrie(item) ||
-            this.isBackstagePasses(item) ||
-            this.isSulfuras(item)
-        )
-    }
-
-    isConjured(item) {
-        return item.name.includes('Conjured')
-    }
-
-    isAgedBrie(item) {
-        return item.name === 'Aged Brie'
-    }
-
-    isBackstagePasses(item) {
-        return item.name === 'Backstage passes to a TAFKAL80ETC concert'
-    }
-
-    isSulfuras(item) {
-        return item.name === 'Sulfuras, Hand of Ragnaros'
     }
 
     hasSellInDatePassed(item) {
