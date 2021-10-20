@@ -31,6 +31,30 @@ export class Item {
         return this._name === 'Sulfuras, Hand of Ragnaros'
     }
 
+    decreaseQualityBy(number) {
+        if (this._quality > 0) {
+            this._quality = this.isConjured()
+                ? this._quality - number - 1
+                : this._quality - number
+        }
+    }
+
+    increaseQualityBy(number) {
+        if (this._quality < 50) {
+            this._quality = this._quality + number
+        }
+    }
+
+    decreaseSellIn() {
+        if (!this.isSulfuras()) {
+            this._sellIn = this._sellIn - 1
+        }
+    }
+
+    hasSellInDatePassed() {
+        return this._sellIn < 0
+    }
+
     get name() {
         return this._name
     }
@@ -63,9 +87,9 @@ export class GildedRose {
         this.items.forEach(item => {
             this.updateQualityBeforeSellIn(item)
 
-            this.decreaseSellIn(item)
+            item.decreaseSellIn()
 
-            if (this.hasSellInDatePassed(item)) {
+            if (item.hasSellInDatePassed()) {
                 this.updateQualityAfterSellIn(item)
             }
         })
@@ -75,23 +99,23 @@ export class GildedRose {
 
     updateQualityAfterSellIn(item) {
         if (item.isAgedBrie()) {
-            this.increaseQuality(item, 1)
+            item.increaseQualityBy(1)
         }
 
         if (item.isBackstagePasses()) {
-            this.decreaseQuality(item, item.quality)
+            item.decreaseQualityBy(item.quality)
         }
 
         if (!item.isSpecialItem()) {
-            this.decreaseQuality(item, 1)
+            item.decreaseQualityBy(1)
         }
     }
 
     updateQualityBeforeSellIn(item) {
         if (!item.isSpecialItem()) {
-            this.decreaseQuality(item, 1)
+            item.decreaseQualityBy(1)
         } else {
-            this.increaseQuality(item, 1)
+            item.increaseQualityBy(1)
 
             if (item.isBackstagePasses()) {
                 this.updateBackstagePassesQuality(item)
@@ -101,34 +125,10 @@ export class GildedRose {
 
     updateBackstagePassesQuality(item) {
         if (item.sellIn < 11 && item.quality < 50) {
-            this.increaseQuality(item, 1)
+            item.increaseQualityBy(1)
         }
         if (item.sellIn < 6 && item.quality < 50) {
-            this.increaseQuality(item, 1)
+            item.increaseQualityBy(1)
         }
-    }
-
-    decreaseQuality(item, number) {
-        if (item.quality > 0) {
-            item.quality = item.isConjured()
-                ? item.quality - number - 1
-                : item.quality - number
-        }
-    }
-
-    increaseQuality(item, number) {
-        if (item.quality < 50) {
-            item.quality = item.quality + number
-        }
-    }
-
-    decreaseSellIn(item: Item) {
-        if (!item.isSulfuras()) {
-            item.sellIn = item.sellIn - 1
-        }
-    }
-
-    hasSellInDatePassed(item) {
-        return item.sellIn < 0
     }
 }
