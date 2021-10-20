@@ -9,7 +9,7 @@ export class Item {
         this._quality = quality
     }
 
-    public updateQuality() {
+    public update() {
         this.updateQualityBeforeSellIn()
 
         this.decreaseSellIn()
@@ -20,17 +20,11 @@ export class Item {
     }
 
     private isSpecialItem() {
-        return (
-            this.isAgedBrie() || this.isBackstagePasses() || this.isSulfuras()
-        )
+        return this.isBackstagePasses() || this.isSulfuras()
     }
 
     private isConjured() {
         return this._name.includes('Conjured')
-    }
-
-    private isAgedBrie() {
-        return this._name === 'Aged Brie'
     }
 
     private isBackstagePasses() {
@@ -49,19 +43,19 @@ export class Item {
         }
     }
 
-    private increaseQualityBy(number) {
+    protected increaseQualityBy(number) {
         if (this._quality < 50) {
             this._quality = this._quality + number
         }
     }
 
-    private decreaseSellIn() {
+    protected decreaseSellIn() {
         if (!this.isSulfuras()) {
             this._sellIn = this._sellIn - 1
         }
     }
 
-    private hasSellInDatePassed() {
+    protected hasSellInDatePassed() {
         return this._sellIn < 0
     }
 
@@ -87,10 +81,6 @@ export class Item {
     }
 
     updateQualityAfterSellIn() {
-        if (this.isAgedBrie()) {
-            this.increaseQualityBy(1)
-        }
-
         if (this.isBackstagePasses()) {
             this.decreaseQualityBy(this._quality)
         }
@@ -121,16 +111,39 @@ export class Item {
     }
 }
 
+export class AgedBrie extends Item {
+    constructor(sellIn, quality) {
+        super('Aged Brie', sellIn, quality)
+    }
+
+    public update() {
+        this.increaseQualityBy(1)
+
+        this.decreaseSellIn()
+
+        if (this.hasSellInDatePassed()) {
+            this.increaseQualityBy(1)
+        }
+    }
+}
+
 export class GildedRose {
     items: Array<Item>
 
     constructor(items = [] as Array<Item>) {
-        this.items = items
+        this.items = items.map(item => {
+            switch (item.name) {
+                case 'Aged Brie':
+                    return new AgedBrie(item.sellIn, item.quality)
+                default:
+                    return item
+            }
+        })
     }
 
     updateQuality() {
         this.items.forEach(item => {
-            item.updateQuality()
+            item.update()
         })
 
         return this.items
