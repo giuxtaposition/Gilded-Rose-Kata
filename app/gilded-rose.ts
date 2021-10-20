@@ -1,7 +1,7 @@
 export class Item {
-    private _name: string
-    private _sellIn: number
-    private _quality: number
+    protected _name: string
+    protected _sellIn: number
+    protected _quality: number
 
     constructor(name, sellIn, quality) {
         this._name = name
@@ -20,22 +20,18 @@ export class Item {
     }
 
     private isSpecialItem() {
-        return this.isBackstagePasses() || this.isSulfuras()
+        return this.isSulfuras()
     }
 
     private isConjured() {
         return this._name.includes('Conjured')
     }
 
-    private isBackstagePasses() {
-        return this._name === 'Backstage passes to a TAFKAL80ETC concert'
-    }
-
     private isSulfuras() {
         return this._name === 'Sulfuras, Hand of Ragnaros'
     }
 
-    private decreaseQualityBy(number) {
+    protected decreaseQualityBy(number) {
         if (this._quality > 0) {
             this._quality = this.isConjured()
                 ? this._quality - number - 1
@@ -59,32 +55,15 @@ export class Item {
         return this._sellIn < 0
     }
 
-    private updateQualityBeforeSellIn() {
+    public updateQualityBeforeSellIn() {
         if (!this.isSpecialItem()) {
             this.decreaseQualityBy(1)
         } else {
             this.increaseQualityBy(1)
-
-            if (this.isBackstagePasses()) {
-                this.updateBackstagePassesQuality()
-            }
         }
     }
 
-    updateBackstagePassesQuality() {
-        if (this._sellIn < 11 && this._quality < 50) {
-            this.increaseQualityBy(1)
-        }
-        if (this._sellIn < 6 && this._quality < 50) {
-            this.increaseQualityBy(1)
-        }
-    }
-
-    updateQualityAfterSellIn() {
-        if (this.isBackstagePasses()) {
-            this.decreaseQualityBy(this._quality)
-        }
-
+    private updateQualityAfterSellIn() {
         if (!this.isSpecialItem()) {
             this.decreaseQualityBy(1)
         }
@@ -127,6 +106,32 @@ export class AgedBrie extends Item {
     }
 }
 
+export class BackstagePasses extends Item {
+    constructor(sellIn, quality) {
+        super('Backstage passes to a TAFKAL80ETC concert', sellIn, quality)
+    }
+
+    public update() {
+        this.increaseQualityBy(1)
+        this.updateQualityBeforeSellIn()
+
+        this.decreaseSellIn()
+
+        if (this.hasSellInDatePassed()) {
+            this.decreaseQualityBy(this._quality)
+        }
+    }
+
+    public updateQualityBeforeSellIn() {
+        if (this._sellIn < 11 && this._quality < 50) {
+            this.increaseQualityBy(1)
+        }
+        if (this._sellIn < 6 && this._quality < 50) {
+            this.increaseQualityBy(1)
+        }
+    }
+}
+
 export class GildedRose {
     items: Array<Item>
 
@@ -135,6 +140,8 @@ export class GildedRose {
             switch (item.name) {
                 case 'Aged Brie':
                     return new AgedBrie(item.sellIn, item.quality)
+                case 'Backstage passes to a TAFKAL80ETC concert':
+                    return new BackstagePasses(item.sellIn, item.quality)
                 default:
                     return item
             }
