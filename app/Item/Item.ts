@@ -10,6 +10,9 @@ export abstract class Item {
     protected _name: string
     protected _sellIn: number
     protected _quality: number
+    protected MAX_QUALITY: number = 50
+    protected MIN_QUALITY: number = 0
+    protected MIN_SELL_IN: number = 0
 
     constructor(name, sellIn, quality) {
         this._name = name
@@ -40,13 +43,13 @@ export abstract class Item {
     }
 
     protected decreaseQualityBy(number) {
-        if (this._quality > 0) {
+        if (this._quality > this.MIN_QUALITY) {
             this._quality = this._quality - number
         }
     }
 
     protected increaseQualityBy(number) {
-        if (this._quality < 50) {
+        if (this._quality < this.MAX_QUALITY) {
             this._quality = this._quality + number
         }
     }
@@ -56,7 +59,7 @@ export abstract class Item {
     }
 
     protected hasSellInDatePassed() {
-        return this._sellIn < 0
+        return this._sellIn < this.MIN_SELL_IN
     }
 
     get name() {
