@@ -19,15 +19,9 @@ export class Item {
         }
     }
 
-    private isConjured() {
-        return this._name.includes('Conjured')
-    }
-
     protected decreaseQualityBy(number) {
         if (this._quality > 0) {
-            this._quality = this.isConjured()
-                ? this._quality - number - 1
-                : this._quality - number
+            this._quality = this._quality - number
         }
     }
 
@@ -124,6 +118,22 @@ export class Sulfuras extends Item {
     public update() {}
 }
 
+export class Conjured extends Item {
+    constructor(sellIn, quality) {
+        super('Conjured Potato', sellIn, quality)
+    }
+
+    public update() {
+        this.decreaseQualityBy(2)
+
+        this.decreaseSellIn()
+
+        if (this.hasSellInDatePassed()) {
+            this.decreaseQualityBy(2)
+        }
+    }
+}
+
 export class GildedRose {
     items: Array<Item>
 
@@ -136,6 +146,8 @@ export class GildedRose {
                     return new BackstagePasses(item.sellIn, item.quality)
                 case 'Sulfuras, Hand of Ragnaros':
                     return new Sulfuras(item.sellIn, item.quality)
+                case 'Conjured Potato':
+                    return new Conjured(item.sellIn, item.quality)
                 default:
                     return item
             }
