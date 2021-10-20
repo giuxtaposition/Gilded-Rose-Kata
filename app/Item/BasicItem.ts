@@ -2,20 +2,10 @@ import { Item } from './index'
 
 export class BasicItem extends Item {
     public update() {
-        this.updateQualityBeforeSellIn()
+        this.decreaseSellInBy(1)
 
-        this.decreaseSellIn()
-
-        this.updateQualityAfterSellIn()
-    }
-
-    private updateQualityAfterSellIn() {
-        if (this.hasSellInDatePassed()) {
-            this.decreaseQualityBy(1)
-        }
-    }
-
-    private updateQualityBeforeSellIn() {
-        this.decreaseQualityBy(1)
+        this.hasSellInDatePassed()
+            ? this.decreaseQualityBy(2)
+            : this.decreaseQualityBy(1)
     }
 }

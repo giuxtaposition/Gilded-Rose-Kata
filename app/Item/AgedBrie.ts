@@ -2,20 +2,10 @@ import { Item } from './index'
 
 export class AgedBrie extends Item {
     public update() {
-        this.updateQualityBeforeSellIn()
+        this.decreaseSellInBy(1)
 
-        this.decreaseSellIn()
-
-        this.updateQualityAfterSellIn()
-    }
-
-    private updateQualityAfterSellIn() {
-        if (this.hasSellInDatePassed()) {
-            this.increaseQualityBy(1)
-        }
-    }
-
-    private updateQualityBeforeSellIn() {
-        this.increaseQualityBy(1)
+        this.hasSellInDatePassed()
+            ? this.increaseQualityBy(2)
+            : this.increaseQualityBy(1)
     }
 }

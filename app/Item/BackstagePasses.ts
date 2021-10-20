@@ -2,25 +2,25 @@ import { Item } from './index'
 
 export class BackstagePasses extends Item {
     public update() {
-        this.updateQualityBeforeSellIn()
+        this.decreaseSellInBy(1)
 
-        this.decreaseSellIn()
-
-        this.updateQualityAfterSellIn()
+        this.hasSellInDatePassed()
+            ? this.updateQualityAfterSellIn()
+            : this.updateQualityBeforeSellIn()
     }
 
     private updateQualityAfterSellIn() {
-        if (this.hasSellInDatePassed()) {
-            this.decreaseQualityBy(this._quality)
-        }
+        return this.decreaseQualityBy(this._quality)
     }
 
     public updateQualityBeforeSellIn() {
         this.increaseQualityBy(1)
-        if (this._sellIn < 11 && this._quality < this.MAX_QUALITY) {
+
+        if (this._sellIn < 11) {
             this.increaseQualityBy(1)
         }
-        if (this._sellIn < 6 && this._quality < this.MAX_QUALITY) {
+
+        if (this._sellIn < 6) {
             this.increaseQualityBy(1)
         }
     }
