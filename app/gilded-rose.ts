@@ -9,15 +9,7 @@ export class Item {
         this._quality = quality
     }
 
-    public update() {
-        this.updateQualityBeforeSellIn()
-
-        this.decreaseSellIn()
-
-        if (this.hasSellInDatePassed()) {
-            this.updateQualityAfterSellIn()
-        }
-    }
+    public update() {}
 
     protected decreaseQualityBy(number) {
         if (this._quality > 0) {
@@ -39,14 +31,6 @@ export class Item {
         return this._sellIn < 0
     }
 
-    public updateQualityBeforeSellIn() {
-        this.decreaseQualityBy(1)
-    }
-
-    private updateQualityAfterSellIn() {
-        this.decreaseQualityBy(1)
-    }
-
     get name() {
         return this._name
     }
@@ -65,6 +49,22 @@ export class Item {
 
     set quality(quality) {
         this._quality = quality
+    }
+}
+
+export class BasicItem extends Item {
+    constructor(name, sellIn, quality) {
+        super(name, sellIn, quality)
+    }
+
+    public update() {
+        this.decreaseQualityBy(1)
+
+        this.decreaseSellIn()
+
+        if (this.hasSellInDatePassed()) {
+            this.decreaseQualityBy(1)
+        }
     }
 }
 
@@ -149,7 +149,7 @@ export class GildedRose {
                 case 'Conjured Potato':
                     return new Conjured(item.sellIn, item.quality)
                 default:
-                    return item
+                    return new BasicItem(item.name, item.sellIn, item.quality)
             }
         })
     }
