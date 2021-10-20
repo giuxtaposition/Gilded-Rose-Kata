@@ -1,4 +1,4 @@
-export class Item {
+export abstract class Item {
     protected _name: string
     protected _sellIn: number
     protected _quality: number
@@ -9,7 +9,27 @@ export class Item {
         this._quality = quality
     }
 
-    public update() {}
+    abstract update()
+
+    static basicItem(name, sellIn, quality) {
+        return new BasicItem(name, sellIn, quality)
+    }
+
+    static agedBrie(name, sellIn, quality) {
+        return new AgedBrie(name, sellIn, quality)
+    }
+
+    static backstagePasses(name, sellIn, quality) {
+        return new BackstagePasses(name, sellIn, quality)
+    }
+
+    static sulfuras(name, sellIn, quality) {
+        return new Sulfuras(name, sellIn, quality)
+    }
+
+    static conjured(name, sellIn, quality) {
+        return new Conjured(name, sellIn, quality)
+    }
 
     protected decreaseQualityBy(number) {
         if (this._quality > 0) {
@@ -42,21 +62,9 @@ export class Item {
     get quality() {
         return this._quality
     }
-
-    set sellIn(sellIn) {
-        this._sellIn = sellIn
-    }
-
-    set quality(quality) {
-        this._quality = quality
-    }
 }
 
 export class BasicItem extends Item {
-    constructor(name, sellIn, quality) {
-        super(name, sellIn, quality)
-    }
-
     public update() {
         this.decreaseQualityBy(1)
 
@@ -69,10 +77,6 @@ export class BasicItem extends Item {
 }
 
 export class AgedBrie extends Item {
-    constructor(sellIn, quality) {
-        super('Aged Brie', sellIn, quality)
-    }
-
     public update() {
         this.increaseQualityBy(1)
 
@@ -85,10 +89,6 @@ export class AgedBrie extends Item {
 }
 
 export class BackstagePasses extends Item {
-    constructor(sellIn, quality) {
-        super('Backstage passes to a TAFKAL80ETC concert', sellIn, quality)
-    }
-
     public update() {
         this.increaseQualityBy(1)
         this.updateQualityBeforeSellIn()
@@ -111,18 +111,10 @@ export class BackstagePasses extends Item {
 }
 
 export class Sulfuras extends Item {
-    constructor(sellIn, quality) {
-        super('Sulfuras, Hand of Ragnaros', sellIn, quality)
-    }
-
     public update() {}
 }
 
 export class Conjured extends Item {
-    constructor(sellIn, quality) {
-        super('Conjured Potato', sellIn, quality)
-    }
-
     public update() {
         this.decreaseQualityBy(2)
 
@@ -138,20 +130,7 @@ export class GildedRose {
     items: Array<Item>
 
     constructor(items = [] as Array<Item>) {
-        this.items = items.map(item => {
-            switch (item.name) {
-                case 'Aged Brie':
-                    return new AgedBrie(item.sellIn, item.quality)
-                case 'Backstage passes to a TAFKAL80ETC concert':
-                    return new BackstagePasses(item.sellIn, item.quality)
-                case 'Sulfuras, Hand of Ragnaros':
-                    return new Sulfuras(item.sellIn, item.quality)
-                case 'Conjured Potato':
-                    return new Conjured(item.sellIn, item.quality)
-                default:
-                    return new BasicItem(item.name, item.sellIn, item.quality)
-            }
-        })
+        this.items = items
     }
 
     updateQuality() {
