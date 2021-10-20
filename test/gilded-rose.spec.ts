@@ -1,5 +1,6 @@
 import { expect } from 'chai'
-import { Item, GildedRose } from '../app/gilded-rose'
+import GildedRose from '../app/gilded-rose'
+import { Item } from '../app/Item'
 
 describe('Gilded Rose: ', function () {
     it('quality decreases by 1 for regular items', function () {
